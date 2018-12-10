@@ -1,0 +1,64 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.1.0'
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+group 'com.test'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+apply plugin: 'java'
+apply plugin: 'org.junit.platform.gradle.plugin'
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testRuntime
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
+
+    testCompile(
+            'org.junit.jupiter:junit-jupiter-api:5.1.0',
+            'junit:junit:4.11',
+
+            'org.mockito:mockito-core:2.21.0',
+            'io.cucumber:cucumber-java:4.2.0',
+            'io.cucumber:cucumber-junit:4.2.0',
+            'io.cucumber:gherkin:4.0.0'
+    )
+    testRuntime(
+            'org.junit.jupiter:junit-jupiter-engine:5.1.0',
+            'org.junit.platform:junit-platform-launcher:1.1.0',
+            'org.junit.platform:junit-platform-runner:1.1.0'
+    )
+}
+test {
+    useJUnitPlatform()
+}
+
+task cucumber() {
+    dependsOn assemble, compileTestJava
+    doLast {
+        javaexec {
+            main = "cucumber.api.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = ['--plugin', 'pretty', '--glue', 'cucumber.steps', 'build/resources/test/cucumber/steps/scenario1.feature']
+        }
+    }
+}
+

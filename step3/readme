@@ -1,0 +1,7 @@
+59c675f8d1629e508c696d270a5801fe17bde4c3
+
+It is a simple implementation of shopping cart.
+It is a Gradle project in Java8, all dependencies are specified in build.gradle
+
+Please use IntelliJ (preferrable) import this project, it would automatically gets loaded.
+Right click test/java to run all unit tests and cucumber tests based on the scenarios.
